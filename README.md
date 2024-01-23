@@ -1,8 +1,8 @@
 # 造“派”计划
 下图为BlueberryPi1  
-![IMG_20231205_211152](https://github.com/Commander-bao/BlueberryPi/assets/95075569/afb8e7bc-de96-4132-a683-2fd60b78a8c4)
+![](2.Docs/Images/BlueberryPi%201.jpg)
 下图为BlueberryPi-Core
-![Collage_20231028_133309](https://github.com/Commander-bao/BlueberryPi/assets/95075569/0a4608a5-0f75-4c3b-86ae-9c73847ea4e0)
+![](2.Docs/Images/BlueberryPi-Core.jpg)
 ## 0.关于本项目
 当我看到树莓派4b的那一刻起，我就对这个卡片大小的单板计算机深深的吸引，漂亮的布局、完整的功能...我能不能自己也做一个呢？  
 这就是造“派”计划的由来。本人通过四处搜寻资料以及在[这个项目](https://oshwhub.com/logicworld/h6_board)的指引下，成功画出了**BlueberryPi 1**，又在自学Altium Designer后画了它的核心板**BlueberryPi-Core**（时间原因还没调试）。  
