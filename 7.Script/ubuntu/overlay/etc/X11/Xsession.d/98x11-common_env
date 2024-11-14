@@ -1,0 +1,5 @@
+# This file is sourced by Xsession(5), not executed.
+
+. /etc/profile
+
+# vim:set ai et sts=2 sw=2 tw=80:

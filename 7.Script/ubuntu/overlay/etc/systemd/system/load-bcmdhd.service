@@ -1,0 +1,10 @@
+[Unit]
+Description=Load bcmdhd Kernel Module
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/insmod /vendor/etc/firmware/bcmdhd.ko
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

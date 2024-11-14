@@ -1,0 +1,16 @@
+#!/bin/sh
+# Log some extra information at the beginning of a suspend/resume cycle.
+# TODO: Make this hook only run when PM_DEBUG is true?
+
+. "${PM_FUNCTIONS}"
+
+case "$1" in
+       hibernate|suspend)
+	       npu_powerctrl -s
+               ;;
+       thaw|resume)
+	       npu_powerctrl -r
+               ;;
+       *) exit $NA
+               ;;
+esac

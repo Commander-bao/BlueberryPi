@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Log some extra information at the beginning of a suspend/resume cycle.
+
+echo "!!!!!!!!!!!npu $1 $2" > /dev/kmsg
+
+case "$1-$2" in
+       pre-hibernate|pre-suspend)
+	       npu_powerctrl -s
+               ;;
+       post-hibernate|post-suspend)
+	       npu_powerctrl -r
+               ;;
+       *) exit $NA
+               ;;
+esac

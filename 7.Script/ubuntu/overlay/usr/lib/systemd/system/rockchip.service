@@ -1,0 +1,14 @@
+#start
+[Unit]
+Description=Setup rockchip platform environment
+DefaultDependencies=no
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/etc/init.d/rockchip.sh
+
+[Install]
+WantedBy=sysinit.target
+#end
+

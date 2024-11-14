@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+#    10-help-text - print the help text associated with the distro
+
+printf "\n"
+printf " * Baoge's Github:     https:github.com/Commander-bao\n"
+printf " * Baoge's Blogger:    https:cmder.xyz\n"
+
+if [ -e /boot/boot_init ];then 
+    source /etc/init.d/boot_init.sh > /dev/null 2>&1
+    echo " * Board Name:     "$BOARD_NAME
+    echo " * Device-tree:    "$BOARD_DTB
+fi
+
+if [ -e /etc/build-release ];then 
+    cat /etc/build-release 
+fi
+printf "\n"

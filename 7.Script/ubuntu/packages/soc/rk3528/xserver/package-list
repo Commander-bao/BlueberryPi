@@ -1,0 +1,6 @@
+xserver-common_1.20.11-1_all.deb                    -->     xserver-common_1.20.13-1ubuntu1~20.04.2_all
+xserver-xorg-core_1.20.11-2_arm64.deb               -->     xserver-xorg-core_1.20.13-1ubuntu1~20.04.2_arm64
+xserver-xorg-core-dbgsym_1.20.11-1_arm64.deb
+xserver-xorg-dev_1.20.11-1_arm64.deb                -->     xserver-xorg-dev_1.20.13-1ubuntu1~20.04.2_arm64
+xserver-xorg-legacy_1.20.11-1_arm64.deb             -->     xserver-xorg-legacy_1.20.13-1ubuntu1~20.04.2_arm64
+xserver-xorg-legacy-dbgsym_1.20.11-1_arm64.deb

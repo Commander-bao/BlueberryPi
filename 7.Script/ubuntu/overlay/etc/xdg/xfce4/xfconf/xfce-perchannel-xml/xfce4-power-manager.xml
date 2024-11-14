@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-power-manager" version="1.0">
+  <property name="xfce4-power-manager" type="empty">
+    <!-- Let other power manager(e.g. trigger-happy) handle power key -->
+    <property name="power-button-action" type="uint" value="0"/>
+
+    <!-- Disable DPMS(auto screen-off) by default -->
+    <property name="dpms-enabled" type="bool" value="false"/>
+    <property name="blank-on-ac" type="int" value="0"/>
+
+    <!-- Disable Screen lock by default -->
+    <property name="lock-screen-suspend-hibernate" type="bool" value="false"/>
+  </property>
+</channel>

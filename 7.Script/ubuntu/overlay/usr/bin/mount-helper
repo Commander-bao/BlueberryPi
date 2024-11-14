@@ -1,0 +1,101 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:       mount-all
+# Default-Start:  S
+# Default-Stop:
+# Description:    Mount all internal partitions in /etc/fstab
+### END INIT INFO
+
+# Don't exit on error status
+set +e
+
+# Uncomment below to see more logs
+# set -x
+
+. $(dirname $0)/disk-helper
+
+LOGFILE=/tmp/mount-all.log
+
+do_part()
+{
+	# Not enough args
+	[ $# -lt 6 ] && return
+
+	# Ignore comments
+	echo $1 | grep -q "^#" && return
+
+	DEV=$(device_from_attr ${1##*=})
+	MOUNT_POINT=$2
+	FSTYPE=$3
+	OPTS=$4
+	PASS=$6 # Skip fsck when pass is 0
+
+	echo "Handling $DEV $MOUNT_POINT $FSTYPE $OPTS $PASS"
+
+	# Setup check/mount tools and do some prepare
+	prepare_part || return
+
+	# Parse ro/rw opt
+	MOUNT_RO_RW=rw
+	if echo $OPTS | grep -o "[^,]*ro\>" | grep "^ro$"; then
+		MOUNT_RO_RW=ro
+	fi
+
+	if mountpoint -q $MOUNT_POINT && ! is_rootfs; then
+		# Make sure other partitions are unmounted.
+		umount $MOUNT_POINT &>/dev/null || return
+	fi
+
+	# Check and repair
+	check_part
+
+	# Mount partition
+	is_rootfs || mount_part || return
+
+	# Resize partition if needed
+	resize_part
+
+	# Restore ro/rw
+	remount_part $MOUNT_RO_RW
+}
+
+mount_all()
+{
+	echo "Will now mount all partitions in /etc/fstab"
+
+	AUTO_MKFS="/.auto_mkfs"
+	if [ -f $AUTO_MKFS ];then
+		echo "Note: Will auto format partitons, remove $AUTO_MKFS to disable"
+	else
+		unset AUTO_MKFS
+	fi
+
+	SKIP_FSCK="/.skip_fsck"
+	if [ -f $SKIP_FSCK ];then
+		echo "Note: Will skip fsck, remove $SKIP_FSCK to enable"
+	else
+		echo "Note: Create $SKIP_FSCK to skip fsck"
+		echo " - The check might take a while if didn't shutdown properly!"
+		unset SKIP_FSCK
+	fi
+
+	while read LINE;do
+		do_part $LINE
+	done < /etc/fstab
+}
+
+case "$1" in
+	start|"")
+		# Mount basic file systems firstly
+		mount -a -t "proc,devpts,tmpfs,sysfs,debugfs,pstore"
+
+		mount_all 2>&1 | tee $LOGFILE
+		echo "Log saved to $LOGFILE"
+		;;
+	*)
+		echo "Usage: mount-helper start" >&2
+		exit 3
+		;;
+esac
+
+:

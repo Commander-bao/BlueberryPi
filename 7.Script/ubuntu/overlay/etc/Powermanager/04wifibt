@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Log some extra information at the beginning of a suspend/resume cycle.
+
+case "$1-$2" in
+	pre-hibernate|pre-suspend)
+		hciconfig hci0 down
+		ifconfig wlan0 down
+		;;
+	post-hibernate|post-suspend)
+		ifconfig wlan0 up
+		wifibt-init.sh
+		;;
+	*) exit $NA
+		;;
+esac

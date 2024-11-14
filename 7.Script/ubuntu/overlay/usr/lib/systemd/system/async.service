@@ -1,0 +1,13 @@
+[Unit]
+Description=enable ASYNC for Ubuntu Display
+Before=rockchip.service
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/S10atomic_commit.sh start
+ExecStop=/etc/init.d/S10atomic_commit.sh stop
+ExecReload=/etc/init.d/S10atomic_commit.sh reload
+
+[Install]
+WantedBy=multi-user.target
+

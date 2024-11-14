@@ -1,0 +1,13 @@
+[Unit]
+Description=Boot time animation
+DefaultDependencies=no
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/bin/bootanim
+Type=forking
+KillMode=none
+SendSIGKILL=no
+
+[Install]
+WantedBy=graphical.target

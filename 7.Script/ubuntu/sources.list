@@ -1,0 +1,10 @@
+deb http://mirrors.aliyun.com/ubuntu-ports/ focal main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu-ports/ focal-backports main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu-ports/ focal-proposed main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu-ports/ focal-security main multiverse restricted universe
+deb http://mirrors.aliyun.com/ubuntu-ports/ focal-updates main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ focal main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ focal-backports main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ focal-proposed main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ focal-security main multiverse restricted universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ focal-updates main multiverse restricted universe

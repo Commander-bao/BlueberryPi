@@ -1,0 +1,7 @@
+network:
+    renderer: NetworkManager
+    # ethernets:
+    #     eth0:
+    #         dhcp4: true
+    #     eth1:
+    #         dhcp4: true

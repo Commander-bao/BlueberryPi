@@ -1,0 +1,6 @@
+binary/
+*.tar.gz
+*.img
+rootfs/
+*.7z
+packages/arm64/embedfire/scratch_3.10.2.2_arm64.deb

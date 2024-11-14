@@ -1,0 +1,12 @@
+[Unit]
+Description=Resize all internal mounted partitions
+DefaultDependencies=no
+After=local-fs.target
+ConditionPathExists=/etc/fstab
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/resize-helper
+
+[Install]
+WantedBy=sysinit.target

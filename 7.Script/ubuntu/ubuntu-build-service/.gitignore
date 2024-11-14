@@ -1,0 +1,15 @@
+*/.build
+*/cache
+*/chroot
+*/config
+*/binary
+
+*/*.build-log.txt
+*/*.modified_timestamps
+*/*.packages.install
+*/*.config.tar.bz2
+*/*.contents
+*/*.md5sums.txt
+*/*.packages
+*/*.sha1sums.txt
+*/*.tar.gz

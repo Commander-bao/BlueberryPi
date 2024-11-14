@@ -1,0 +1,5 @@
+
+KERNELS=="0001:11:00.0", SUBSYSTEM=="net", SUBSYSTEMS=="pci", DRIVERS=="r8125",  ACTION=="add", NAME+="eth3"
+
+KERNELS=="0002:21:00.0", SUBSYSTEM=="net", SUBSYSTEMS=="pci", DRIVERS=="r8125",  ACTION=="add", NAME+="eth2"
+

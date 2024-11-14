@@ -1,0 +1,13 @@
+#start
+[Unit]
+Description=Setup reboot platform
+After=adbd.service
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/auto_reboot_test.sh start
+
+[Install]
+WantedBy=multi-user.target
+#end
+

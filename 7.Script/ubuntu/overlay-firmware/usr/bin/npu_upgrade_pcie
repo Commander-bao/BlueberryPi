@@ -1,0 +1,156 @@
+#!/bin/bash
+PROGRAM=${0##*/}
+
+#reset npu
+/usr/bin/npu_powerctrl -i
+/usr/bin/npu_powerctrl -o
+sleep 1
+
+if [ $# -ne 4 ]; then
+	echo 'Usage: '$PROGRAM' loader uboot trust boot'
+	exit
+fi
+DIR="/usr/share/npu_fw_pcie"
+UPGRADE_TOOL=/usr/bin/upgrade_tool
+
+LOADER=$DIR/$1
+UBOOT=$DIR/$2
+TRUST=$DIR/$3
+BOOT=$DIR/$4
+UBOOT_ADDR=0x20000
+TRUST_ADDR=0x20800
+BOOT_ADDR=0x21000
+
+function download_func()
+{
+	local RET1=1
+	echo 'start to download loader...' >>  /tmp/npu.log
+	$UPGRADE_TOOL db $LOADER > /dev/null
+	if [ $? -ne 0 ]; then
+		echo 'failed to download loader!' >>  /tmp/npu.log
+		return $RET1;
+	fi
+	echo 'download loader ok' >>  /tmp/npu.log
+
+	sleep 1
+	echo 'start to wait loader...' >>  /tmp/npu.log
+	$UPGRADE_TOOL td > /dev/null
+	if [ $? -ne 0 ]; then
+		echo 'failed to wait loader!' >>  /tmp/npu.log
+		return $RET1
+	fi
+	echo 'loader is ready'  >>  /tmp/npu.log
+
+	echo 'start to write uboot...' >>  /tmp/npu.log
+	$UPGRADE_TOOL wl $UBOOT_ADDR $UBOOT > /dev/null
+	if [ $? -ne 0 ]; then
+		echo 'failed to write uboot!' >>  /tmp/npu.log
+		return $RET1
+	fi
+	echo 'write uboot ok' >>  /tmp/npu.log
+
+	echo 'start to write trust...'
+	$UPGRADE_TOOL wl $TRUST_ADDR $TRUST > /dev/null
+	if [ $? -ne 0 ]; then
+		echo 'failed to write trust!' >>  /tmp/npu.log
+		return $RET1
+	fi
+	echo 'write trust ok' >>  /tmp/npu.log
+
+	echo 'start to write boot...' >>  /tmp/npu.log
+	$UPGRADE_TOOL wl $BOOT_ADDR $BOOT > /dev/null
+	if [ $? -ne 0 ]; then
+		echo 'failed to write boot!' >>  /tmp/npu.log
+		return $RET1
+	fi
+	echo 'write boot ok' >>  /tmp/npu.log
+	RET1=0
+	return $RET1
+}
+
+function check_device_ready_func()
+{
+	echo 'start to wait device...' >  /tmp/npu.log
+	local i=0
+	local RET=1
+	while [ $i -lt 10 ]; do
+		$UPGRADE_TOOL ld > /dev/null
+		if [ $? -ne 0 ]; then
+			i=$((i+1))
+			echo $i
+			sleep 0.1
+		else
+			sleep 0.1
+			break
+		fi
+		if [ $i -eq 5 ]; then
+			/usr/bin/npu_powerctrl -o
+			sleep 3
+			echo 'reset npu to retry!!!' >> /tmp/npu.log
+		fi
+	done
+	if [ $i -ge 10 ]; then
+		echo 'failed to wait device!'  >>  /tmp/npu.log
+		return $RET
+	fi
+	echo 'device is ready' >>  /tmp/npu.log
+	RET=0
+	return $RET
+}
+
+function poweron_Npu_func()
+{
+	/usr/bin/npu_powerctrl -i
+	sleep 0.1
+	/usr/bin/npu_powerctrl -o
+	sleep 1
+}
+
+if [ ! -f $UPGRADE_TOOL ]; then
+	echo $UPGRADE_TOOL 'is not existed!'
+	exit
+fi
+
+if [ ! -f $LOADER ]; then
+	echo $LOADER 'is not existed!'
+	exit
+fi
+
+if [ ! -f $UBOOT ]; then
+	echo $UBOOT 'is not existed!'
+	exit
+fi
+
+if [ ! -f $TRUST ]; then
+	echo $TRUST 'is not existed!'
+	exit
+fi
+
+if [ ! -f $BOOT ]; then
+	echo $BOOT 'is not existed!'
+	exit
+fi
+
+check_device_ready_func
+if [ $? = 1 ];then
+	echo "check_device_ready error!!!" >> /tmp/npu.log
+	poweron_Npu_func
+	check_device_ready_func
+fi
+
+download_func
+if [ $? = 1 ];then
+	echo "reset download_func"
+	poweron_Npu_func
+	check_device_ready_func
+	download_func
+fi
+
+echo 'start to run system...' >>  /tmp/npu.log
+$UPGRADE_TOOL rs $UBOOT_ADDR $TRUST_ADDR $BOOT_ADDR $UBOOT $TRUST $BOOT > /dev/null
+if [ $? -ne 0 ]; then
+	echo 'failed to run system!' >>  /tmp/npu.log
+	exit
+fi
+echo 'run system ok' >>  /tmp/npu.log
+echo 1 > /sys/devices/platform/f8000000.pcie/pcie_deferred

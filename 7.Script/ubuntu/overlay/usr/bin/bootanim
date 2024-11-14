@@ -1,0 +1,100 @@
+#!/bin/sh
+#
+# Usage:
+# bootanim start [timeout]
+# bootanim stop
+#
+# Example hook:
+# root@RK3588:/# more /etc/bootanim.d/gst-bootanim.sh
+# #!/bin/sh
+# touch ${TAG_FILE:-/dev/null}
+# gst-play-1.0 /etc/bootanim.d/bootanim.mp4 -q --no-interactive&
+
+export TAG_FILE=/tmp/.bootanim
+rm -f $TAG_FILE
+
+SCRIPT=/usr/bin/bootanim
+HOOK_DIR=/etc/bootanim.d/
+PID_FILE=/tmp/bootanim.pid
+LOG_FILE=/tmp/bootanim.log
+TIMEOUT=${2:-${BOOTANIM_DEFAULT_TIMEOUT:-5}}
+
+pid_sid()
+{
+	ps x -o pid,sid | grep -w $@
+}
+
+bootanim_start()
+{
+	[ -d $HOOK_DIR ] || return
+
+	echo "Starting bootanim: $$..."
+
+	# Freeze display server
+	touch /dev/null $XSERVER_FREEZE_DISPLAY $WESTON_FREEZE_DISPLAY
+
+	# Start bootanim hooks
+	for hook in $(find $HOOK_DIR -maxdepth 1 -name "*.sh"); do
+		echo "Starting hook: $hook..."
+		$hook
+		echo "Started hook: $hook..."
+	done
+
+	# Save bootanim's pid
+	echo $$ > $PID_FILE
+
+	# Exit when no animation started
+	if [ ! -e "$TAG_FILE" ]; then
+		bootanim_stop 2>&1 | tee -a $LOG_FILE
+		return
+	fi
+
+	# Timeout killer
+	start-stop-daemon -S -q -b -n bootanim-stop \
+		-x /bin/sh -- -c "sleep $TIMEOUT; $SCRIPT stop"
+}
+
+bootanim_stop()
+{
+	[ -f $PID_FILE ] || return
+
+	# Parse our sid (same as bootanim's pid)
+	SID=$(cat $PID_FILE; rm -rf $PID_FILE)
+	[ -n "$SID" ] || return
+
+	# Parse children pid
+	CPID=$(pid_sid $SID | xargs -n 2 | cut -d' ' -f1 | xargs)
+
+	echo "Stopping bootanim: ${CPID:-none} for $SID..."
+
+	# Pause children
+	[ -z "$CPID" ] || kill -STOP $CPID &>/dev/null
+
+	# Unfreeze display server
+	rm -f $XSERVER_FREEZE_DISPLAY $WESTON_FREEZE_DISPLAY
+	sleep .1
+
+	# Kill children
+	[ -z "$CPID" ] || kill -9 $CPID &>/dev/null
+}
+
+case "$1" in
+	start|"")
+		# Make sure that we own this session (pid equals sid)
+		if ! pid_sid -q "$$$" || [ $(realpath "$0") != $SCRIPT ] ; then
+			setsid $SCRIPT $@
+		else
+			# Run it
+			$SCRIPT stop
+			bootanim_start 2>&1 | tee -a $LOG_FILE&
+		fi
+		;;
+	stop)
+		bootanim_stop 2>&1 | tee -a $LOG_FILE
+		;;
+	*)
+		echo "Usage: $0 [start|stop]"
+		;;
+esac
+
+:
