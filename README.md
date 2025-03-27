@@ -1,9 +1,11 @@
 # 造“派”计划
 
+下图为AdorkableTV
+
+![](2.Docs/Images/AdorkableTV.jpg)
+
 下图为BlueberryPi1  
 ![](2.Docs/Images/BlueberryPi%201.jpg)
-下图为BlueberryPi-Core
-![](2.Docs/Images/BlueberryPi-Core.jpg)
 
 ## 0.关于本项目
 
