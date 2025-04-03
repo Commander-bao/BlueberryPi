@@ -19,6 +19,10 @@
 
 - BlueberryPi-Core、Adorkable_Core请使用Altium Designer打开。  
 
+BlueberryPi 1请使用嘉立创3313阻抗，1.6mm板厚  
+
+Adorkabe_Core、Adorkable_EXP请使用嘉立创3313阻抗，1.2mm板厚；Adorkable_Base请使用嘉立创3313阻抗，1.6mm板厚
+
 ## 2.镜像烧录说明
 
 BlueberryPi 1目前使用的是香橙派官方的镜像文件[这是网址](http://www.orangepi.cn/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-3-LTS.html)（蓝莓版镜像待移植）。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中。  
