@@ -1,0 +1,246 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ *
+ */
+
+ /*********************************************************************
+ *           立创开发板不靠卖板赚钱，以培养中国工程师为己任  
+ *         泰山派软硬件资料与相关扩展板软硬件资料官网全部开源
+ *                      开发板官网：www.lckfb.com            
+ *                     立创论坛：oshwhub.com/forum           
+ *            关注B站：【立创开发板】，掌握我们的最新动态！  
+ *********************************************************************
+ * 文件名：tspi-rk3566-user-v10.dtsi
+ * 描述：用户自定义层
+ * 更新:
+ * 时间          作者           联系           说明
+ * 2023-09-13   吴才成    1378913492@qq.com   v1.0.0
+ *********************************************************************/
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/display/media-bus-format.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include "rk3566.dtsi"
+#include <dt-bindings/display/rockchip_vop.h>
+
+
+//tspi核心配置层，这里是几乎后期不需要怎么改动
+#include "tspi-rk3566-core-v10.dtsi"
+
+//【开/关】EDP 显示屏幕配置，用户可以基于此复制自己的屏幕，注意EDP与MIPI屏幕互斥，因为共用了VOP如果需要同显自行修改
+// #include "tspi-rk3566-edp-v10.dtsi"
+
+//【开/关】mipi 显示屏幕配置，用户可以基于此复制自己的屏幕，注意EDP与MIPI屏幕互斥，因为共用了VOP如果需要同显自行修改
+// #include "tspi-rk3566-dsi-v10.dtsi"
+
+//【开/关】HDMI 显示屏幕配置，里面内容几乎可以不用动，如果不需要hdmi显示直接注释掉即可
+// #include "tspi-rk3566-hdmi-v10.dtsi"
+
+//【开/关】摄像头 目前视频的是ov5659
+// #include "tspi-rk3566-csi-v10.dtsi"
+
+//【开/关】网口 扩展板上使用的是千兆网，不接扩展板情况下可以关闭
+// #include "tspi-rk3566-gmac1-v10.dtsi"
+
+//【开/关】下方是用户定义层，所有用户修改理论上在此下方修改就好了
+/ {
+	model = "lckfb tspi V10 Board";
+	compatible = "lckfb,tspi-v10", "rockchip,rk3566";
+
+	rk_headset: rk-headset {
+		compatible = "rockchip_headset";
+		headset_gpio = <&gpio0 RK_PC5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&hp_det>;
+	};
+
+	leds: leds {
+		compatible = "gpio-leds";
+		rgb_led_r: rgb-led-r {
+			gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "timer";
+			linux,delay-reg = <0>;   		// 延时注册
+			linux,blink-delay-on = <500>; 	// 打开时间
+			linux,blink-delay-off = <500>;	// 关闭时间
+		};
+		rgb_led_g: rgb-led-g {
+			gpios = <&gpio1 RK_PB1 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "timer";
+			linux,delay-reg = <100>;   		// 延时注册
+			linux,blink-delay-on = <1000>; 
+			linux,blink-delay-off = <1000>;
+		};
+		rgb_led_b: rgb-led-b {
+			gpios = <&gpio1 RK_PB0 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "timer";
+			linux,delay-reg = <100>;  		// 延时注册
+			linux,blink-delay-on = <1500>; 
+			linux,blink-delay-off = <1500>;
+		};
+	};
+
+};
+
+&pinctrl {
+	headphone {
+		hp_det: hp-det {
+			rockchip,pins = <0 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+	spi3_tft{
+		spi3_tft:spi3-tft{
+			rockchip,pins =
+			/* spi3_clkm1 */
+			<4 RK_PC2 2 &pcfg_pull_up_drv_level_1>,
+			/* spi3_cs */
+			<4 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>,
+			/* spi3_mosim1 */
+			<4 RK_PC3 2 &pcfg_pull_up_drv_level_1>;
+		};
+	};
+	/* 配置TFT */
+	tft_rst {
+		gpio3_pb6:gpio3-pb6 {
+			rockchip,pins = <3 RK_PB6 RK_FUNC_GPIO &pcfg_output_high>;
+		};
+	};
+
+	tft_dc {
+		gpio3_pb0:gpio3-pb0 {
+			rockchip,pins = <3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
+	tft_bl {
+		gpio3_pc2:gpio3-pc2 {
+			rockchip,pins = <3 RK_PC2 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+	};
+
+
+};
+
+//用户三色灯
+&leds {
+	status = "okay";
+};
+
+//耳机插入检测，不使用扩展板情况需关闭，否则默认会检测到耳机插入
+&rk_headset {
+	status = "disabled";
+};
+
+//用户串口3
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3m1_xfer>;
+};
+
+//用户I2C2
+&i2c2 {
+	status = "okay";
+
+	/*添加你的I2C设备参考
+	gt1x: gt1x@14 {
+		compatible = "goodix,gt1x";
+		reg = <0x14>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&touch_gpio>;
+		goodix,rst-gpio = <&gpio0 RK_PB6 GPIO_ACTIVE_HIGH>;
+		goodix,irq-gpio = <&gpio0 RK_PB5 IRQ_TYPE_LEVEL_LOW>;
+	};*/
+};
+
+&i2c3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3m1_xfer>;
+	/*添加你的I2C设备参考
+	gt1x: gt1x@14 {
+		compatible = "goodix,gt1x";
+		reg = <0x14>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&touch_gpio>;
+		goodix,rst-gpio = <&gpio0 RK_PB6 GPIO_ACTIVE_HIGH>;
+		goodix,irq-gpio = <&gpio0 RK_PB5 IRQ_TYPE_LEVEL_LOW>;
+	};*/
+};
+
+
+&spi3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi3_tft &gpio3_pb6 &gpio3_pb0 &gpio3_pc2>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	tft: lcd@0{
+		compatible = "sitronix,st7789v"; //固定的写法使用sitronix,st7789v驱动
+		spi-max-frequency = <100000000>; //设置SPI的速率
+		reg = <0>;//SPI序号
+		spi-cpol;
+		spi-cpha;
+		rotate = <90>;// 旋转角度，lcd驱动里会读取并设置对应寄存器
+		fps = <100>;
+		width = <240>;
+		height = <320>;
+		// invert;
+		// bgr = <0>;
+		buswidth = <8>;//SPI 8位数据长度
+		led-gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_LOW>;//BL
+		dc-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;//DC
+		reset-gpios = <&gpio3 RK_PB6 GPIO_ACTIVE_HIGH>;//RES
+		cs-gpios = <&gpio4 RK_PC5 GPIO_ACTIVE_LOW>;//CS
+		// debug = <7>;
+	};
+};
+
+&pwm8 {
+	status = "okay";
+};
+
+&pwm9 {
+	status = "okay";
+};
+
+&pwm14 {
+	status = "okay";
+};
+
+//pwd 15遥控器
+&pwm15 {
+	status = "okay";
+	compatible = "rockchip,remotectl-pwm";
+	remote_pwm_id = <3>;
+	handle_cpu_id = <1>;
+	remote_support_psci = <0>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm15m0_pins>;
+
+	//用户自定方法：adb设置输出日志并通过dmesg确定usercode=address与key_table=command
+	//echo 1 > sys/module/rockchip_pwm_remotectl/parameters/code_print
+	//键值可在 include/dt-bindings/input/linux-event-codes.h 中查找
+	ir_key1 {
+		rockchip,usercode = <0xff00>;
+		rockchip,key_table =
+			<0xf2	KEY_MENU>,
+			<0xe9	KEY_BACK>,
+			<0xe3	KEY_ENTER>,
+			<0xe7	KEY_UP>,
+			<0xad	KEY_DOWN>,
+			<0xf7	KEY_LEFT>,
+			<0xa5	KEY_RIGHT>,
+			<0xba	KEY_1>,
+			<0xb9	KEY_2>,
+			<0xb8	KEY_3>,
+			<0xbb	KEY_4>,
+			<0xbf	KEY_5>,
+			<0xbc	KEY_6>,
+			<0xf8	KEY_7>,
+			<0xea	KEY_8>,
+			<0xf6	KEY_9>,
+			<0xe6	KEY_0>;
+	};
+};
