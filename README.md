@@ -1,4 +1,14 @@
-# 造“派”计划
+<h1 align="center">造“派”计划</h1>
+<div align="center">
+
+<a href="https://github.com/Commander-bao/BlueberryPi/stargazers"><img src="https://img.shields.io/github/stars/Commander-bao/BlueberryPi" alt="Stars Badge"/></a>
+<a href="https://github.com/Commander-bao/BlueberryPi/network/members"><img src="https://img.shields.io/github/forks/Commander-bao/BlueberryPi" alt="Forks Badge"/></a>
+<a href="https://github.com/Commander-bao/BlueberryPi/pulls"><img src="https://img.shields.io/github/issues-pr/Commander-bao/BlueberryPi" alt="Pull Requests Badge"/></a>
+<a href="https://github.com/Commander-bao/BlueberryPi/issues"><img src="https://img.shields.io/github/issues/Commander-bao/BlueberryPi" alt="Issues Badge"/></a>
+<a href="https://github.com/Commander-bao/BlueberryPi/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Commander-bao/BlueberryPi?color=2b9348"></a>
+<a href="https://github.com/Commander-bao/BlueberryPi/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Commander-bao/BlueberryPi?color=2b9348" alt="License Badge"/></a>
+
+</div>
 
 从左至右分别为AdorkableTV、BlueberryPi 1、BlueberryPi-Core
 ![](2.Docs/Images/All.jpg)
