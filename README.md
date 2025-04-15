@@ -19,9 +19,11 @@
 
 - BlueberryPi-Core、Adorkable_Core请使用Altium Designer打开。  
 
-BlueberryPi 1请使用嘉立创3313阻抗，1.6mm板厚  
+BlueberryPi 1请使用嘉立创3313阻抗，1.6mm板厚。  
 
-Adorkabe_Core、Adorkable_EXP请使用嘉立创3313阻抗，1.2mm板厚；Adorkable_Base请使用嘉立创3313阻抗，1.6mm板厚
+Adorkabe_Core、Adorkable_EXP请使用嘉立创3313阻抗，1.2mm板厚；Adorkable_Base请使用嘉立创3313阻抗，1.6mm板厚。  
+
+以上均选用免费20%阻抗管控，有半孔的请使用四边半孔工艺。  
 
 ## 2.镜像烧录说明
 
