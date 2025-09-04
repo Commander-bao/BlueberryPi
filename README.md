@@ -10,6 +10,10 @@
 
 </div>
 
+![](2.Docs/Images/AdorkableTV-rendered.jpg)
+
+![](2.Docs/Images/AdorkableTV-exploded.jpg)
+
 从左至右分别为AdorkableTV、BlueberryPi 1、BlueberryPi-Core
 ![](2.Docs/Images/All.jpg)
 
