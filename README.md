@@ -43,7 +43,7 @@ Adorkable_Base_V2_EXP为0.8mm板厚。
 
 BlueberryPi 1目前使用的是香橙派官方的镜像文件[这是网址](http://www.orangepi.cn/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-3-LTS.html)（蓝莓版镜像待移植）。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中。  
 
-AdorkableTV目前使用的是我定制的Ubuntu镜像，有xfce和xfce-full两个版本，可以从百度网盘中下载使用。下载好镜像后使用瑞芯微烧录工具下载到板载EMMC中。
+AdorkableTV目前使用的是我定制的Ubuntu镜像，有xfce和xfce-full两个版本，可以从[百度网盘](https://pan.baidu.com/s/1jsw3okSnh8e9oXT7oVLvJg?pwd=v6qs)中下载使用。下载好镜像后使用瑞芯微烧录工具下载到板载EMMC中。
 
 如果要为立创泰山派定制Ubuntu镜像，请参考Script文件夹下的README文档制作文件系统，将官方提供的镜像文件通过RKDevTool解包后替换boot.img和rootfs.img（建议修改分区表文件，扩大rootfs分区容量），最后通过RKDevTool文件夹下的打包脚本打包。也可以从百度网盘下载使用我移植的蓝莓版Ubuntu20.04桌面系统，Bootloader和Kernel已经放在了对应的文件夹下，大家可以根据需要下载。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中，也可使用瑞芯微烧录工具下载到板载EMMC中。 
 
