@@ -35,17 +35,17 @@
 
 BlueberryPi 1请使用嘉立创3313阻抗，1.6mm板厚。  
 
-Adorkabe_Core、Adorkable_EXP请使用嘉立创3313阻抗，1.2mm板厚；Adorkable_Base请使用嘉立创3313阻抗，1.6mm板厚。  
+Adorkabe_Core、Adorkable_EXP请使用嘉立创3313阻抗，1.2mm板厚；Adorkable_Base、Adorkable_Base_V2请使用嘉立创3313阻抗，1.6mm板厚。以上均选用免费20%阻抗管控，有半孔的请使用四边半孔工艺。  
 
-以上均选用免费20%阻抗管控，有半孔的请使用四边半孔工艺。  
+Adorkable_Base_V2_EXP为0.8mm板厚。
 
 ## 2.镜像烧录说明
 
 BlueberryPi 1目前使用的是香橙派官方的镜像文件[这是网址](http://www.orangepi.cn/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-3-LTS.html)（蓝莓版镜像待移植）。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中。  
 
-我还为立创泰山派移植了蓝莓版Ubuntu20.04桌面系统，Bootloader和Kernel放在了对应的文件夹下，大家可以根据需要下载，完整的镜像文件待我修正好一些小bug后会上传。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中，也可使用瑞芯微烧录工具下载到板载EMMC中。  
+AdorkableTV目前使用的是我定制的Ubuntu镜像，有xfce和xfce-full两个版本，可以从百度网盘中下载使用。下载好镜像后使用瑞芯微烧录工具下载到板载EMMC中。
 
-如果要为RK3566定制Ubuntu镜像，请参考Script文件夹下的README文档制作文件系统，将官方提供的镜像文件通过RKDevTool解包后替换boot.img和rootfs.img（建议修改分区表文件，扩大rootfs分区容量），最后通过RKDevTool文件夹下的打包脚本打包。
+如果要为立创泰山派定制Ubuntu镜像，请参考Script文件夹下的README文档制作文件系统，将官方提供的镜像文件通过RKDevTool解包后替换boot.img和rootfs.img（建议修改分区表文件，扩大rootfs分区容量），最后通过RKDevTool文件夹下的打包脚本打包。也可以从百度网盘下载使用我移植的蓝莓版Ubuntu20.04桌面系统，Bootloader和Kernel已经放在了对应的文件夹下，大家可以根据需要下载。下载好镜像后可以使用balenaEtcher将镜像烧录至TF卡中，也可使用瑞芯微烧录工具下载到板载EMMC中。 
 
 ## 3.硬件使用说明
 
@@ -53,4 +53,4 @@ BlueberryPi 1目前使用的是香橙派官方的镜像文件[这是网址](http
 
 - BlueberryPi-Core使用说明：参考全志官方/香橙派/BlueberryPi 1中的原理图，绘制底板后，将BlueberryPi-Core贴至底板上使用（待测试）。  
 
-- AdorkableTV使用说明：绘制扩展底板，将核心板和功能板分别贴至底板两面，烧录镜像至EMMC中使用。
+- AdorkableTV使用说明：绘制扩展底板，将核心板和功能板分别贴至底板两面，烧录镜像至TF卡或EMMC中使用。
